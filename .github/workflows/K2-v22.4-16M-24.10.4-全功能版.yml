@@ -192,7 +192,7 @@ jobs:
           K2_DTS_MAKEFILE_CONFIG_IPK: ${{ secrets.K2_DTS_MAKEFILE_CONFIG_IPK }}
         run: |
           rm -rf target-repo
-          git clone https://oauth2:${K2_DTS_MAKEFILE_CONFIG_IPK}@github.com/mafei0825/k2-openwrt-builder.git target-repo
+          git clone https://oauth2:${K2_DTS_MAKEFILE_CONFIG_IPK}@github.com/lumanman2017/k2-openwrt-builder.git target-repo
           cd target-repo
           mkdir -p config-files-24.10
           cp ${{ github.workspace }}/openwrt/.config config-files-24.10/

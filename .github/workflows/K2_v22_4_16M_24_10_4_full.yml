@@ -18,7 +18,7 @@ jobs:
           gcc-multilib g++-multilib gettext git libncurses5-dev libssl-dev \
           python3-setuptools rsync swig unzip zlib1g-dev file wget
 
-      - name: 检出当前仓库（占位）
+      - name: 检出当前仓库
         uses: actions/checkout@v7
 
       - name: 清理旧的 openwrt 目录
@@ -183,26 +183,23 @@ jobs:
           make -j$(nproc) V=s
           echo "编译完成时间: $(date)"
 
-      # ========== 推送配置 ==========
+      # ========== 保存配置到当前仓库 ==========
       - name: ⚙️ 配置 Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: 📤 推送配置文件
-        env:
-          K2_DTS_MAKEFILE_CONFIG_IPK: ${{ secrets.K2_DTS_MAKEFILE_CONFIG_IPK }}
+      - name: 📤 保存配置文件到当前仓库
         run: |
-          rm -rf target-repo
-         git clone https://github.com/lumanman2017/k2-openwrt-builder.git target-repo
-         cd target-repo
-      # 替换remote地址，注入token
-         git remote set-url origin https://${{ secrets.PUSH_TOKEN }}@github.com/lumanman2017/k2-openwrt-builder.git
+          cd ${{ github.workspace }}
+          mkdir -p config-files-24.10
+          cp openwrt/.config config-files-24.10/
+          cp openwrt/target/linux/ramips/dts/mt7620a_phicomm_k2-v22.4.dts config-files-24.10/
+          cp openwrt/target/linux/ramips/image/mt7620.mk config-files-24.10/
 
-         git config user.name "github-actions[bot]"
-         git config user.email "github-actions[bot]@users.noreply.github.com"
-         git commit -m "更新配置 $(date)" || true
-        git push origin main
+          git add config-files-24.10/
+          git commit -m "更新 OpenWrt 24.10.4 配置 $(date)" || echo "无变更，跳过提交"
+          git push
 
       # ========== 整理固件 ==========
       - name: 📦 整理固件

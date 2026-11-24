@@ -7,6 +7,8 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     timeout-minutes: 480
+    permissions:
+      contents: write
 
     steps:
       - name: 安装编译依赖
@@ -192,15 +194,15 @@ jobs:
           K2_DTS_MAKEFILE_CONFIG_IPK: ${{ secrets.K2_DTS_MAKEFILE_CONFIG_IPK }}
         run: |
           rm -rf target-repo
-          git clone https://oauth2:${K2_DTS_MAKEFILE_CONFIG_IPK}@github.com/lumanman2017/k2-openwrt-builder.git target-repo
-          cd target-repo
-          mkdir -p config-files-24.10
-          cp ${{ github.workspace }}/openwrt/.config config-files-24.10/
-          cp ${{ github.workspace }}/openwrt/target/linux/ramips/dts/mt7620a_phicomm_k2-v22.4.dts config-files-24.10/
-          cp ${{ github.workspace }}/openwrt/target/linux/ramips/image/mt7620.mk config-files-24.10/
-          git add config-files-24.10/
-          git commit -m "更新配置 $(date)" || true
-          git push
+         git clone https://github.com/lumanman2017/k2-openwrt-builder.git target-repo
+         cd target-repo
+      # 替换remote地址，注入token
+         git remote set-url origin https://${{ secrets.PUSH_TOKEN }}@github.com/lumanman2017/k2-openwrt-builder.git
+
+         git config user.name "github-actions[bot]"
+         git config user.email "github-actions[bot]@users.noreply.github.com"
+         git commit -m "更新配置 $(date)" || true
+        git push origin main
 
       # ========== 整理固件 ==========
       - name: 📦 整理固件

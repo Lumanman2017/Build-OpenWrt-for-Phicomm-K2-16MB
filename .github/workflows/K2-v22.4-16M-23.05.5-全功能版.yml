@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    timeout-minutes: 360
+    timeout-minutes: 480
 
     steps:
       - name: 安装编译依赖
@@ -17,7 +17,7 @@ jobs:
           python3-setuptools rsync swig unzip zlib1g-dev file wget
 
       - name: 检出当前仓库（占位）
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: 清理旧的 openwrt 目录
         run: rm -rf openwrt
@@ -229,8 +229,8 @@ jobs:
 
       # ========== 上传固件 ==========
       - name: ⬆️ 上传固件
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: K2-v22.4-16M-23.05.5-全功能固件-v4
+          name: K2-v22.4-16M-23.05.5-full
           path: openwrt/firmware/
           retention-days: 30

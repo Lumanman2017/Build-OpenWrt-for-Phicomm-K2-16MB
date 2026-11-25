@@ -1,4 +1,4 @@
-name: K2 v22.4 OpenWrt 24.10.4
+name: K2 v22.4 OpenWrt 24.10.8
 
 on:
   workflow_dispatch:
@@ -24,13 +24,13 @@ jobs:
       - name: 清理旧的 openwrt 目录
         run: rm -rf openwrt
 
-      - name: 下载 OpenWrt 24.10.4 源码
+      - name: 下载 OpenWrt 24.10.8 源码
         run: |
           git clone --depth 1 -b openwrt-24.10 https://github.com/openwrt/openwrt.git openwrt
           cd openwrt
           git fetch --tags
-          git checkout v24.10.4
-          echo "✅ OpenWrt 24.10.4 源码下载完成"
+          git checkout v24.10.8
+          echo "✅ OpenWrt 24.10.8 源码下载完成"
 
       # ========== 16M闪存适配 ==========
       - name: 🔧 修改 DTS (8MB -> 16MB)
@@ -130,14 +130,12 @@ jobs:
           echo "CONFIG_PACKAGE_luci-i18n-base-zh-cn=y" >> .config
           echo "CONFIG_LUCI_LANG_zh_Hans=y" >> .config
 
-          # ===== WireGuard =====
-          echo "CONFIG_PACKAGE_kmod-wireguard=y" >> .config
-          echo "CONFIG_PACKAGE_wireguard-tools=y" >> .config
-          echo "CONFIG_PACKAGE_luci-proto-wireguard=y" >> .config
 
-          # ===== ZeroTier =====
-          echo "CONFIG_PACKAGE_zerotier=y" >> .config
+
+          # ===== OpenVPN =====
           echo "CONFIG_PACKAGE_kmod-tun=y" >> .config
+          echo "CONFIG_PACKAGE_openvpn-openssl=y" >> .config
+          echo "CONFIG_PACKAGE_luci-app-openvpn=y" >> .config
 
           # ===== 自动升级 =====
           echo "CONFIG_PACKAGE_owut=y" >> .config
@@ -215,6 +213,6 @@ jobs:
       - name: ⬆️ 上传固件
         uses: actions/upload-artifact@v7
         with:
-          name: K2-v22.4-16M-24.10.4-全功能固件-v2
+          name: K2-v22.4-16M-24.10.8-全功能固件-v2.1
           path: openwrt/firmware/
           retention-days: 30

@@ -40,7 +40,7 @@ jobs:
           if [ -f "$FILE" ]; then
             echo "修改前 DTS 分区大小："
             grep -A5 "partition@50000" "$FILE"
-            sed -i 's/reg = <0x50000 0x7b0000>/reg = <0x50000 0x1fb0000>/' "$FILE"
+            sed -i 's/reg = <0x50000 0x7b0000>/reg = <0x50000 0xfb0000>/' "$FILE"
             echo "修改后 DTS 分区大小："
             grep -A5 "partition@50000" "$FILE"
           fi

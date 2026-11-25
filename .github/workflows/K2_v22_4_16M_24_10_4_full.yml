@@ -1,4 +1,4 @@
-name: K2 v22.4 OpenWrt 24.10.4 push n11
+name: K2 v22.4 OpenWrt 24.10.4
 
 on:
   workflow_dispatch:

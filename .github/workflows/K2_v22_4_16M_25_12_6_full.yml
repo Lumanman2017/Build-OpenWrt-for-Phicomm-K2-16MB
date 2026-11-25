@@ -217,6 +217,6 @@ jobs:
       - name: ⬆️ 上传固件
         uses: actions/upload-artifact@v7
         with:
-          name: K2-v22.4-16M-25.12.6-full-V1.0
+          name: K2-v22.4-16M-25.12.6-full-V1.0.1
           path: openwrt/firmware/
           retention-days: 30

@@ -200,7 +200,7 @@ jobs:
           cp openwrt/target/linux/ramips/image/mt7620.mk config-files-24.10/
 
           git add config-files-24.10/
-          git commit -m "更新 OpenWrt 24.10.4 配置 $(date)" || echo "无变更，跳过提交"
+          git commit -m "更新 OpenWrt 24.10 配置 $(date)" || echo "无变更，跳过提交"
           git push
 
       # ========== 整理固件 ==========
